@@ -5,6 +5,7 @@ parameters:
     buildConfiguration: ''
     envName: ''
 
+stages:
 - stage: '$(stageName)'
   displayName: 'Deploy to the staging environment'
   dependsOn: $(dependsOnName)
