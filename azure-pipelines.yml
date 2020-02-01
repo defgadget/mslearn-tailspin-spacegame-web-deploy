@@ -80,7 +80,7 @@ stages:
     dependsOnName: Build
     envName: dev
     webAppName: $(WebAppNameDev)
-    buildConfiguration: $(buildConfiguration)
+    bldConfiguration: $(buildConfiguration)
 
 # - stage: 'Dev'
 #   displayName: 'Deploy to the dev environment'
@@ -117,7 +117,7 @@ stages:
     dependsOnName: Dev 
     envName: test
     webAppName: $(WebAppNameTest)
-    buildConfiguration: $(buildConfiguration)
+    bldConfiguration: $(buildConfiguration)
 
 # - stage: 'Test'
 #   displayName: 'Deploy to the test environment'
@@ -149,7 +149,7 @@ stages:
     dependsOnName: Test 
     envName: staging 
     webAppName: $(WebAppNameStaging)
-    buildConfiguration: $(buildConfiguration)
+    bldConfiguration: $(buildConfiguration)
     
 # - stage: 'Staging'
 #   displayName: 'Deploy to the staging environment'

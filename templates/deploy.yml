@@ -2,7 +2,7 @@ parameters:
     webAppName: ''
     dependsOnName: ''
     stageName: ''
-    buildConfiguration: ''
+    bldConfiguration: ''
     envName: ''
 
 stages:
@@ -27,4 +27,4 @@ stages:
             inputs:
               azureSubscription: 'Resource Manager - Tailspin - Space Game'
               appName: '$(webAppName)'
-              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+              package: '$(Pipeline.Workspace)/drop/$(bldConfiguration)/*.zip'
