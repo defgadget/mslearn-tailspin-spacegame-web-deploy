@@ -1,0 +1,29 @@
+parameters:
+    webAppName: ''
+    dependsOnName: ''
+    stageName: ''
+    buildConfiguration: ''
+    envName: ''
+
+- stage: '$(stageName)'
+  displayName: 'Deploy to the staging environment'
+  dependsOn: $(dependsOnName)
+  jobs:
+  - deployment: Deploy
+    pool:
+      vmImage: 'ubuntu-16.04'
+    environment: $(envName)
+    variables:
+    - group: 'Release'
+    strategy:
+      runOnce:
+        deploy:
+        steps:
+        - download: current
+            artifact: drop
+        - task: AzureWebApp@1
+            displayName: 'Azure App Service Deploy: website'
+            inputs:
+            azureSubscription: 'Resource Manager - Tailspin - Space Game'
+            appName: '$(webAppName)'
+            package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip
