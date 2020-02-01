@@ -74,102 +74,102 @@ stages:
     - publish: '$(Build.ArtifactStagingDirectory)'
       artifact: drop
 
-- template: templates/deploy.yml
-  parameters:
-    stageName: 'Dev'
-    dependsOnName: Build
-    envName: dev
-    webAppName: $(WebAppNameDev)
-    bldConfiguration: $(buildConfiguration)
+# - template: templates/deploy.yml
+#   parameters:
+#     stageName: 'Dev'
+#     dependsOnName: Build
+#     envName: dev
+#     webAppName: $(WebAppNameDev)
+#     bldConfiguration: $(buildConfiguration)
 
-# - stage: 'Dev'
-#   displayName: 'Deploy to the dev environment'
-#   dependsOn: Build
-#   condition: |
-#     and
-#     (
-#       succeeded(),
-#       eq(variables['Build.SourceBranchName'], variables['releaseBranchName'])
-#     )
-#   jobs:
-#   - deployment: Deploy
-#     pool:
-#       vmImage: 'ubuntu-16.04'
-#     environment: dev
-#     variables:
-#     - group: Release
-#     strategy:
-#       runOnce:
-#         deploy:
-#           steps:
-#           - download: current
-#             artifact: drop
-#           - task: AzureWebApp@1
-#             displayName: 'Azure App Service Deploy: website'
-#             inputs:
-#               azureSubscription: 'Resource Manager - Tailspin - Space Game'
-#               appName: '$(WebAppNameDev)'
-#               package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+- stage: 'Dev'
+  displayName: 'Deploy to the dev environment'
+  dependsOn: Build
+  condition: |
+    and
+    (
+      succeeded(),
+      eq(variables['Build.SourceBranchName'], variables['releaseBranchName'])
+    )
+  jobs:
+  - deployment: Deploy
+    pool:
+      vmImage: 'ubuntu-16.04'
+    environment: dev
+    variables:
+    - group: Release
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: drop
+          - task: AzureWebApp@1
+            displayName: 'Azure App Service Deploy: website'
+            inputs:
+              azureSubscription: 'Resource Manager - Tailspin - Space Game'
+              appName: '$(WebAppNameDev)'
+              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
 
-- template: templates/deploy.yml
-  parameters:
-    stageName: 'Test'
-    dependsOnName: Dev 
-    envName: test
-    webAppName: $(WebAppNameTest)
-    bldConfiguration: $(buildConfiguration)
+# - template: templates/deploy.yml
+#   parameters:
+#     stageName: 'Test'
+#     dependsOnName: Dev 
+#     envName: test
+#     webAppName: $(WebAppNameTest)
+#     bldConfiguration: $(buildConfiguration)
 
-# - stage: 'Test'
-#   displayName: 'Deploy to the test environment'
-#   dependsOn: Dev
-#   #condition: eq(variables['Build.Reason'], 'Schedule')
-#   jobs:
-#   - deployment: Deploy
-#     pool:
-#       vmImage: 'ubuntu-16.04'
-#     environment: test
-#     variables:
-#     - group: 'Release'
-#     strategy:
-#       runOnce:
-#         deploy:
-#           steps:
-#           - download: current
-#             artifact: drop
-#           - task: AzureWebApp@1
-#             displayName: 'Azure App Service Deploy: website'
-#             inputs:
-#               azureSubscription: 'Resource Manager - Tailspin - Space Game'
-#               appName: '$(WebAppNameTest)'
-#               package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+- stage: 'Test'
+  displayName: 'Deploy to the test environment'
+  dependsOn: Dev
+  #condition: eq(variables['Build.Reason'], 'Schedule')
+  jobs:
+  - deployment: Deploy
+    pool:
+      vmImage: 'ubuntu-16.04'
+    environment: test
+    variables:
+    - group: 'Release'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: drop
+          - task: AzureWebApp@1
+            displayName: 'Azure App Service Deploy: website'
+            inputs:
+              azureSubscription: 'Resource Manager - Tailspin - Space Game'
+              appName: '$(WebAppNameTest)'
+              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
 
-- template: templates/deploy.yml
-  parameters:
-    stageName: 'Staging'
-    dependsOnName: Test 
-    envName: staging 
-    webAppName: $(WebAppNameStaging)
-    bldConfiguration: $(buildConfiguration)
+# - template: templates/deploy.yml
+#   parameters:
+#     stageName: 'Staging'
+#     dependsOnName: Test 
+#     envName: staging 
+#     webAppName: $(WebAppNameStaging)
+#     bldConfiguration: $(buildConfiguration)
     
-# - stage: 'Staging'
-#   displayName: 'Deploy to the staging environment'
-#   dependsOn: Test
-#   jobs:
-#   - deployment: Deploy
-#     pool:
-#       vmImage: 'ubuntu-16.04'
-#     environment: staging
-#     variables:
-#     - group: 'Release'
-#     strategy:
-#       runOnce:
-#         deploy:
-#           steps:
-#           - download: current
-#             artifact: drop
-#           - task: AzureWebApp@1
-#             displayName: 'Azure App Service Deploy: website'
-#             inputs:
-#               azureSubscription: 'Resource Manager - Tailspin - Space Game'
-#               appName: '$(WebAppNameStaging)'
-#               package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+- stage: 'Staging'
+  displayName: 'Deploy to the staging environment'
+  dependsOn: Test
+  jobs:
+  - deployment: Deploy
+    pool:
+      vmImage: 'ubuntu-16.04'
+    environment: staging
+    variables:
+    - group: 'Release'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: drop
+          - task: AzureWebApp@1
+            displayName: 'Azure App Service Deploy: website'
+            inputs:
+              azureSubscription: 'Resource Manager - Tailspin - Space Game'
+              appName: '$(WebAppNameStaging)'
+              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
